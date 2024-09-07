@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <string.h>
 
 char file_cap[] = "/sys/class/power_supply/BAT0/capacity";
 char file_status[] = "/sys/class/power_supply/BAT0/status";
@@ -25,6 +24,7 @@ int main()
 	status[len-1] = '\0';
 	fclose(fptr_status);
 
+	// prepare colors
 	char status_formatted[128];
 	if(!strcmp(status, "Charging"))
 	{
