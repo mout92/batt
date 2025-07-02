@@ -1,3 +1,2 @@
-CC=clang
-Battery: main.c
-	$(CC) main.c -o batt
+build:
+	gcc -std=c99 -o batt main.c
