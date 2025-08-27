@@ -2,8 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int main()
-{
+int main() {
     // Define paths from sysfs
     char file_cap[] = "/sys/class/power_supply/BAT0/capacity";
     char file_status[] = "/sys/class/power_supply/BAT0/status";
@@ -11,8 +10,7 @@ int main()
 	// Reading current battery capacity
 	FILE *fptr_cap;
 	fptr_cap = fopen(file_cap, "r");
-    if (!fptr_cap)
-    {
+    if (!fptr_cap) {
         fprintf(stderr, "Battery not found\n");
         exit(1);
     }
@@ -24,8 +22,7 @@ int main()
 	// Reading current battery status
 	FILE *fptr_status;
 	fptr_status = fopen(file_status, "r");
-    if (!fptr_status)
-    {
+    if (!fptr_status) {
         fprintf(stderr, "Status not found\n");
         exit(1);
     }
@@ -37,38 +34,32 @@ int main()
 
 	// print status
 	char status_formatted[128];
-	if(!strcmp(status, "Charging"))
-	{
+	if(!strcmp(status, "Charging")) {
 		sprintf(status_formatted, "\e[1;34m%s\e[0m", status);
 	}
 
-	if(!strcmp(status, "Discharging"))
-	{
+	if(!strcmp(status, "Discharging")) {
 		sprintf(status_formatted, "\e[1;31m%s\e[0m", status);
 	}
 
-	if(!strcmp(status, "Full"))
-	{
+	if(!strcmp(status, "Full")) {
 		sprintf(status_formatted, "\e[1;32m%s\e[0m", status);
 	}
 	
 	// Print percentage in green
-	if(capacity >= 50)
-	{
+	if(capacity >= 50) {
 		printf("\e[1;32m%i%%\e[0m -> ", capacity);
 		printf("%s\n", status_formatted);
 	 }
 
 	// Print percentage in yellow
-	if(capacity > 20 && capacity < 50)
-	{
+	if(capacity > 20 && capacity < 50) {
 		printf("\e[1;93m%i%%\e[0m -> ", capacity);
 		printf("%s\n", status_formatted);
 	}
 
 	// Print percentage in red
-	if(capacity <= 20)
-	{
+	if(capacity <= 20) {
 		printf("\e[1;31m%i%%\e[0m -> ", capacity);
 		printf("%s\n", status_formatted);
 	}
