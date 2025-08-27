@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Define paths from sysfs
-char file_cap[] = "/sys/class/power_supply/BAT0/capacity";
-char file_status[] = "/sys/class/power_supply/BAT0/status";
-
 int main()
 {
+    // Define paths from sysfs
+    char file_cap[] = "/sys/class/power_supply/BAT0/capacity";
+    char file_status[] = "/sys/class/power_supply/BAT0/status";
+
 	// Reading current battery capacity
 	FILE *fptr_cap;
 	fptr_cap = fopen(file_cap, "r");
