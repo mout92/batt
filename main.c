@@ -10,6 +10,11 @@ int main()
 	// Reading capacity
 	FILE *fptr_cap;
 	fptr_cap = fopen(file_cap, "r");
+    if (!fptr_cap)
+    {
+        fprintf(stderr, "Battery not found\n");
+        exit(1);
+    }
 	char buffer_cap[128];
 	fgets(buffer_cap, 128, fptr_cap);
 	fclose(fptr_cap);
@@ -18,6 +23,11 @@ int main()
 	// Reading status
 	FILE *fptr_status;
 	fptr_status = fopen(file_status, "r");
+    if (!fptr_status)
+    {
+        fprintf(stderr, "Status not found\n");
+        exit(1);
+    }
 	char status[128];	
 	fgets(status, 128, fptr_status);
 	int len = strlen(status);
