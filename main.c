@@ -48,19 +48,19 @@ int main() {
 	
 	// Print percentage in green
 	if(capacity >= 50) {
-		printf("\e[1;32m%i%%\e[0m -> ", capacity);
+		printf("\e[1;32m%i%%\e[0m - ", capacity);
 		printf("%s\n", status_formatted);
 	 }
 
 	// Print percentage in yellow
 	if(capacity > 20 && capacity < 50) {
-		printf("\e[1;93m%i%%\e[0m -> ", capacity);
+		printf("\e[1;93m%i%%\e[0m - ", capacity);
 		printf("%s\n", status_formatted);
 	}
 
 	// Print percentage in red
 	if(capacity <= 20) {
-		printf("\e[1;31m%i%%\e[0m -> ", capacity);
+		printf("\e[1;31m%i%%\e[0m - ", capacity);
 		printf("%s\n", status_formatted);
 	}
 
