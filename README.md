@@ -1,3 +1,3 @@
 # batt
 A very simple battery checker for Linux.
-Should be shell script instead...
+Should've been a shell script.
