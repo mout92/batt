@@ -4,19 +4,20 @@
 #include <unistd.h>
 
 int main(int argc, char* argv[]) {
-    // Parse command line options
+    
     int print_charge_cycles = 0;
     int opt;
     int cycle_count = 0;
 
+    // Parse command line options
     while((opt = getopt(argc, argv, ":c")) != -1) {
         switch(opt){
             case 'c':
                 print_charge_cycles = 1;
                 break;
             case '?':
-                printf("unknown option: %c\n", optopt);
-                break;
+                fprintf(stderr, "unknown option: %c\n", optopt);
+                exit(EXIT_FAILURE);
         }
     }
     
@@ -101,7 +102,6 @@ int main(int argc, char* argv[]) {
     if(cycle_count) {
         printf(" - \033[1;33m%i cycles\033[0m", cycle_count);
     }
-
 
     printf("\n");
 
