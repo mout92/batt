@@ -7,6 +7,7 @@ int main(int argc, char* argv[]) {
     // Parse command line options
     int print_charge_cycles = 0;
     int opt;
+    int cycle_count = 0;
 
     while((opt = getopt(argc, argv, ":c")) != -1) {
         switch(opt){
@@ -22,6 +23,7 @@ int main(int argc, char* argv[]) {
     // Define paths from sysfs
     char file_cap[] = "/sys/class/power_supply/BAT0/capacity";
     char file_status[] = "/sys/class/power_supply/BAT0/status";
+    char file_cycle_count[] = "/sys/class/power_supply/BAT0/cycle_count";
 
 	// Reading current battery capacity
 	FILE *fptr_cap;
@@ -48,6 +50,22 @@ int main(int argc, char* argv[]) {
 	status[len-1] = '\0';
 	fclose(fptr_status);
 
+    // Reading cycle count
+    if(print_charge_cycles) {
+        FILE* fp = fopen(file_cycle_count, "r");
+        if(!fp) {
+            fprintf(stderr, "Error: cannot open file: \"%s\"\n", file_cycle_count);
+            exit(EXIT_FAILURE);
+        }
+
+        char buf_cycle_count[32];
+        fgets(buf_cycle_count, 32, fp);
+        buf_cycle_count[strlen(buf_cycle_count) - 1] = '\0';
+        cycle_count = atoi(buf_cycle_count);
+        fclose(fp);
+
+    }
+    
 	// print status
 	char status_formatted[128];
 	if(!strcmp(status, "Charging")) {
@@ -80,18 +98,10 @@ int main(int argc, char* argv[]) {
 		printf("%s", status_formatted);
 	}
 
-    if(print_charge_cycles) {
-        FILE* fp = fopen("/sys/class/power_supply/BAT0/cycle_count", "r");
-        if(!fp) {
-            fprintf(stderr, "Error: cannot open file");
-            exit(EXIT_FAILURE);
-        }
-
-        char cycle_count[32];
-        fgets(cycle_count, 32, fp);
-        cycle_count[strlen(cycle_count) - 1] = '\0';
-        printf(" - \033[1;33m%s cycles\033[0m", cycle_count);
+    if(cycle_count) {
+        printf(" - \033[1;33m%i cycles\033[0m", cycle_count);
     }
+
 
     printf("\n");
 
