@@ -1,8 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-int main() {
+int main(int argc, char* argv[]) {
+    // Parse command line options
+    int print_charge_cycles = 0;
+    int opt;
+
+    while((opt = getopt(argc, argv, ":c")) != -1) {
+        switch(opt){
+            case 'c':
+                print_charge_cycles = 1;
+                break;
+            case '?':
+                printf("unknown option: %c\n", optopt);
+                break;
+        }
+    }
+    
     // Define paths from sysfs
     char file_cap[] = "/sys/class/power_supply/BAT0/capacity";
     char file_status[] = "/sys/class/power_supply/BAT0/status";
@@ -49,20 +65,35 @@ int main() {
 	// Print percentage in green
 	if(capacity >= 50) {
 		printf("\e[1;32m%i%%\e[0m - ", capacity);
-		printf("%s\n", status_formatted);
+		printf("%s", status_formatted);
 	 }
 
 	// Print percentage in yellow
 	if(capacity > 20 && capacity < 50) {
 		printf("\e[1;93m%i%%\e[0m - ", capacity);
-		printf("%s\n", status_formatted);
+		printf("%s", status_formatted);
 	}
 
 	// Print percentage in red
 	if(capacity <= 20) {
 		printf("\e[1;31m%i%%\e[0m - ", capacity);
-		printf("%s\n", status_formatted);
+		printf("%s", status_formatted);
 	}
+
+    if(print_charge_cycles) {
+        FILE* fp = fopen("/sys/class/power_supply/BAT0/cycle_count", "r");
+        if(!fp) {
+            fprintf(stderr, "Error: cannot open file");
+            exit(EXIT_FAILURE);
+        }
+
+        char cycle_count[32];
+        fgets(cycle_count, 32, fp);
+        cycle_count[strlen(cycle_count) - 1] = '\0';
+        printf(" - \033[1;33m%s cycles\033[0m", cycle_count);
+    }
+
+    printf("\n");
 
 	return 0;
 }
